@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title= 'Days Without Destiny'
+    base(href='/')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet' href='/node_modules/foundation-sites/dist/foundation-flex.min.css')
+    link(rel='stylesheet' href='/public/foundation-icons/foundation-icons.css')
+    link(rel='stylesheet' href='/public/css/app.css')
+    link(rel='stylesheet' href='/public/css/print.css' media='print')
+    include ./partials/analytics.jade
+    
+  body
+    div(class='row wrapper')  
+      div(class='columns small-12 medium-10 medium-offset-1 large-8 large-offset-2')
+        include ./partials/search.jade

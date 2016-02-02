@@ -1,0 +1,37 @@
+div(class='row align-middle')
+  div(class='columns small-12 ad')
+    include ad.jade
+  div(class='small-12 columns')
+    form(class='row search-form' id='guardian-search')
+      div(class='small-12 columns input-group search-bar')
+        div(class="switch input-group-label platform-switch")
+          input(class="switch-input" id="platformSwitch" type="checkbox" name="platformSwitch")
+          label(class="switch-paddle" for="platformSwitch")
+            span(class="show-for-sr") Switch to PS4
+        input(class='input-group-field search-box' id='guardian-text' type='search' placeholder='Guardian' autofocus='true')
+        div(class='input-group-button')
+          button(type='submit', class='button search-button') Go
+    
+    script.
+      (function(){
+        var path = window.location.pathname;
+        path = path.slice(1);
+        var pathArray = path.split( '/' );
+        if (pathArray[0] == 2 ) {
+          document.getElementById('platformSwitch').checked = true;
+        }
+        var search = document.getElementById('guardian-search');
+        
+        search.addEventListener("submit", function(e) {
+          e.preventDefault();
+          var platformSwitch = document.getElementById('platformSwitch');
+          var guardianText = document.getElementById('guardian-text');
+          var platform = 1;
+          if (platformSwitch.checked)
+            platform = 2;
+          var guardian = guardianText.value;
+          path = '/' + platform + '/' + guardian + '/';
+          console.log(path);
+          window.location = path;
+        }, false);
+      })();

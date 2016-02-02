@@ -1,0 +1,18 @@
+{
+  "name": "days-without-destiny",
+  "version": "0.0.1",
+  "description": "Displays how many days a user has avoided playing Destiny.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chris Fried",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "foundation-sites": "^6.1.2",
+    "http-proxy": "^1.13.0",
+    "jade": "^1.11.0",
+    "path": "^0.12.7"
+  }
+}

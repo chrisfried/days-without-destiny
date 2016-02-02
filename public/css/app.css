@@ -1,0 +1,47 @@
+.platform-switch {
+  padding: 0;
+  border: none;
+  width: 72px;
+}
+.platform-switch .switch-paddle {
+  height: 40px;
+  width: 72px;
+  display: block;
+  background: #107C10;
+}
+.platform-switch .switch-paddle:after {
+  height: 32px;
+  width: 32px;
+}
+.platform-switch input:checked~.switch-paddle {
+  background: #003791;
+}
+.ad {
+  margin: 1em 0;
+}
+.days-without-sign {
+  text-align: center;
+  font-size: 4em;
+  text-transform: uppercase;
+  color: rgb(30,36,43);
+  background: rgba(245,245,245,0.5);
+  border: solid 5px rgb(242, 193, 97);
+  line-height: 1em;
+  margin-bottom: .5em;
+  font-family: 'Averia Serif Libre';
+  padding: .25em 0;
+}
+#guardian-name {
+  text-transform: initial;
+}
+.days-line {
+  font-weight: bold;
+  font-size: 1.75em;
+  vertical-align: middle;
+  line-height: 1.1em;
+}
+@media (max-width: 639px) {
+  .days-without-sign {
+    font-size: 2em;
+  }
+}

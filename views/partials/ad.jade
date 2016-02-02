@@ -1,0 +1,4 @@
+if process.env.AD_CLIENT && process.env.AD_SLOT
+  script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+  ins(class="adsbygoogle", style="display:block", data-ad-client=process.env.AD_CLIENT data-ad-slot=process.env.AD_SLOT, data-ad-format="auto")
+  script (adsbygoogle = window.adsbygoogle || []).push({});

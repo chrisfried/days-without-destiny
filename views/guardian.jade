@@ -1,0 +1,100 @@
+doctype html
+html
+  head
+    title= 'Days Without Destiny'
+    base(href='/')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='https://fonts.googleapis.com/css?family=Averia+Serif+Libre:400,700' rel='stylesheet' type='text/css')
+    link(rel='stylesheet', href='/node_modules/foundation-sites/dist/foundation-flex.min.css')
+    link(rel='stylesheet', href='/public/foundation-icons/foundation-icons.css')
+    link(rel='stylesheet', href='/public/css/odometer-theme-train-station.css')
+    link(rel='stylesheet', href='/public/css/app.css')
+    link(rel='stylesheet' href='/public/css/print.css' media='print')
+    include ./partials/analytics.jade
+    
+  body
+    div(class='row wrapper')  
+      div(class='header columns small-12 medium-10 medium-offset-1 large-8 large-offset-2')
+        include ./partials/search.jade
+        
+      div(class='columns small-12 medium-10 medium-offset-1 large-8 large-offset-2')
+        div(class='columns small-12 days-without-sign')
+          span(id='guardian-name') This Guardian
+          span(class='linebreak') #[br]
+          span has survived#[br]
+          span
+            span(id='days-since-destiny' class='odometer') 0
+            span(class='days-line')  days#[br]
+          span without#[br]
+          span Destiny
+    
+    script(src='/public/js/odometer.min.js')
+    
+    script.
+      (function(){
+        function httpGetAsync(theUrl, callback){
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+              callback(xmlHttp.responseText);
+          }
+          xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+          xmlHttp.send(null);
+        }
+        
+        var accountCallback = function(results) {
+          var json;
+          try {
+            json = JSON.parse(results);
+          } catch(e) {
+            console.log(e);
+          }
+          if (json && json.Response && json.Response.data && json.Response.data.characters && json.Response.data.characters.length) {
+            var lastPlayed;
+            var momentLastPlayed;
+            var daysAgo;
+            json.Response.data.characters.forEach(function(character) {
+              if (character && character.characterBase && character.characterBase.dateLastPlayed) {
+                characterLastPlayed = new Date(character.characterBase.dateLastPlayed);
+                if (character && character.characterBase && character.characterBase.minutesPlayedThisSession)
+                  characterLastPlayed.setMinutes(characterLastPlayed.getMinutes() + parseInt(character.characterBase.minutesPlayedThisSession));
+                if (!lastPlayed || (lastPlayed && characterLastPlayed > lastPlayed))
+                  lastPlayed = new Date(character.characterBase.dateLastPlayed)
+              }
+            });
+            if (lastPlayed)
+              var timeDiff = Math.abs(new Date().getTime() - lastPlayed.getTime());
+              console.log(timeDiff);
+              daysAgo = Math.floor(timeDiff / (1000 * 3600 * 24));
+            var daysElement = document.getElementById('days-since-destiny');
+            daysElement.innerHTML = daysAgo;
+          }
+        }
+        
+        var searchCallback = function(results) {
+          var json;
+          try {
+            json = JSON.parse(results);
+          } catch(e) {
+            console.log(e);
+          }
+          if (json && json.Response && json.Response[0] && json.Response[0].displayName) {
+            document.getElementById('guardian-name').innerHTML = json.Response[0].displayName;
+          }
+          if (json && json.Response && json.Response[0] && json.Response[0].membershipId) {
+            var membershipId = json.Response[0].membershipId;
+            var accountPath = '/Platform/Destiny/' + pathArray[0] + '/Account/' + membershipId + '/Summary/';
+            httpGetAsync(accountPath, accountCallback);
+          }
+        }
+        
+        var path = window.location.pathname;
+        path = path.slice(1);
+        var pathArray = path.split( '/' );
+        var searchPath = '/Platform/Destiny/SearchDestinyPlayer/' + pathArray[0] + '/' + pathArray[1] + '/';
+        if (pathArray[0] == 2 ) {
+          document.getElementById('platformSwitch').checked = true;
+        }
+          
+        httpGetAsync(searchPath, searchCallback);
+      })();
