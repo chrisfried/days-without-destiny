@@ -1,4 +1,5 @@
 # Days Without Destiny
+[dayswithoutdestiny.com](http://dayswithoutdestiny.com/)
 
 A slapdash little web app that displays how many days a user has gone without playing Destiny.
 
