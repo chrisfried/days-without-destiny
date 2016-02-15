@@ -45,3 +45,30 @@
     font-size: 2em;
   }
 }
+body {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+.RdYlGn .q0-11{fill:rgb(254,224,139)}
+.RdYlGn .q1-11{fill:rgb(253,200,120)}
+.RdYlGn .q2-11{fill:rgb(253,174,97)}
+.RdYlGn .q3-11{fill:rgb(249,159,87)}
+.RdYlGn .q4-11{fill:rgb(244,109,67)}
+.RdYlGn .q5-11{fill:rgb(235,75,50)}
+.RdYlGn .q6-11{fill:rgb(215,48,39)}
+.RdYlGn .q7-11{fill:rgb(195,20,38)}
+.RdYlGn .q8-11{fill:rgb(165,0,38)}
+.RdYlGn .q9-11{fill:rgb(100,0,15)}
+.RdYlGn .q10-11{fill:rgb(50,0,0)}
