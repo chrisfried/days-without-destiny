@@ -64,6 +64,26 @@ var daysPlayedCallback = function(days, max) {
         var minutes = parseInt(days[d]/60) % 60;
         return d + ": " + hours + " hours " + minutes + " minutes";
       });
+      
+  var destinyDays = new Array();
+  destinyDays['2014-09-09'] = 'Destiny release date';
+  destinyDays['2014-12-09'] = 'The Dark Below release date';
+  destinyDays['2015-05-19'] = 'House of Wolves release date';
+  destinyDays['2015-09-15'] = 'The Taken King release date';
+      
+  rect.filter(function(d) { return d in destinyDays; })
+      .attr("class", function(d) { return "day " + color(days[d]) + " destiny-day"})
+    .select("title")
+      .text(function(d) {
+        if (days[d]) {
+          var hours = parseInt(days[d]/3600) % 24;
+          var minutes = parseInt(days[d]/60) % 60;
+          return d + ": " + destinyDays[d] + " - " + hours + " hours " + minutes + " minutes";
+        }
+        else {
+          return d + ": " + destinyDays[d];
+        }
+      });
 
   function monthPath(t0) {
     var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
