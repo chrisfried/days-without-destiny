@@ -110,8 +110,13 @@ var characterCallback = function(results, variables) {
     json.Response.data.activities.forEach(function(activity) {
       console.log('activity loop')
       if (activity && activity.period && activity.values.activityDurationSeconds && activity.values.activityDurationSeconds.basic && activity.values.activityDurationSeconds.basic.value) {
-        var date = new Date(activity.period).toISOString().slice(0, 10);
-      //  console.log(date)
+        var dateObject = new Date(activity.period);
+        var month = dateObject.getMonth() + 1;
+        if (month < 10) month = "0" + month;
+        var day = dateObject.getDate();
+        if (day < 10) day = "0" + day;
+        var date = dateObject.getFullYear() + '-' + month + '-' +  day;
+        // console.log(date)
         var duration = activity.values.activityDurationSeconds.basic.value;
         if (activity.values.leaveRemainingSeconds && activity.values.leaveRemainingSeconds.basic && activity.values.leaveRemainingSeconds.basic.value) {
           duration -= activity.values.leaveRemainingSeconds.basic.value;
