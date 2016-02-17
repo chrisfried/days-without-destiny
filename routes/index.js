@@ -9,6 +9,9 @@ router.get('/', function (req, res) {
 router.get('/:membershipType/:guardian', function (req, res) {
   res.render('guardian');
 });
+router.get('/:membershipType/:guardian/fixed', function (req, res) {
+  res.render('guardian');
+});
 
 var bungieProxy = httpProxy.createProxyServer({
   target: 'http://www.bungie.net',

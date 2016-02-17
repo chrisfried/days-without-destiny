@@ -37,10 +37,16 @@ var daysPlayedCallback = function(days, max) {
       cellSize = 17; // cell size
 
   var format = d3.time.format("%Y-%m-%d");
-
+  
+  var range = 11;
+  if (pathArray[2] == 'fixed') {
+    range = 24;
+    max = 86400;
+  }
+  
   var color = d3.scale.quantize()
       .domain([0, max])
-      .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
+      .range(d3.range(range).map(function(d) { return "q" + d + "-" + range; }));
 
   var svg = d3.select(".calendar").selectAll("svg")
       .data(d3.range(2014, 2017))
