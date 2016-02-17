@@ -1,4 +1,4 @@
-function httpGetAsync(theUrl, callback, variables){
+var httpGetAsync = function(theUrl, callback, variables){
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() { 
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -6,6 +6,19 @@ function httpGetAsync(theUrl, callback, variables){
   }
   xmlHttp.open("GET", theUrl, true); // true for asynchronous 
   xmlHttp.send(null);
+}
+
+var startSpinner = function(){
+  document.getElementById('spinner').style.display = "block";
+}
+
+var stopSpinner = function(){
+  document.getElementById('spinner').style.display = "none";
+}
+
+var updateStatus = function (status, fail) {
+  document.getElementById('statusText').innerHTML = status;
+  fail ? document.getElementById('statusText').style.color = "red" : document.getElementById('statusText').style.color = "";
 }
 
 var daysPlayed = new Array();
@@ -99,6 +112,7 @@ var daysPlayedCallback = function(days, max) {
 
 var characterCallback = function(results, variables) {
   console.log('character callback started')
+  updateStatus('Fetching character data for ' + pathArray[1] + ' on ' + platform + '. This could take awhile...');
   var json;
   try {
     json = JSON.parse(results);
@@ -140,6 +154,8 @@ var characterCallback = function(results, variables) {
     if (allTrue) {
       console.log(daysPlayed);
       console.log(dayMax);
+      stopSpinner();
+      updateStatus('');
       daysPlayedCallback(daysPlayed, dayMax);
     }
   }
@@ -147,6 +163,7 @@ var characterCallback = function(results, variables) {
 
 var accountCallback = function(results) {
   console.log('account callback started')
+  updateStatus('Fetching account data for ' + pathArray[1] + ' on ' + platform + '...');
   var json;
   try {
     json = JSON.parse(results);
@@ -169,10 +186,15 @@ var accountCallback = function(results) {
       }
     });
   }
+  else {
+    stopSpinner();
+    updateStatus('Failed to fetch account data for ' + pathArray[1] + ' on ' + platform, true);
+  }
 }
 
 var searchCallback = function(results) {
   console.log('search callback started')
+  updateStatus('Searching for ' + pathArray[1] + ' on ' + platform + '...');
   var json;
   try {
     json = JSON.parse(results);
@@ -187,6 +209,10 @@ var searchCallback = function(results) {
     var accountPath = '/Platform/Destiny/' + pathArray[0] + '/Account/' + membershipId + '/Summary/';
     httpGetAsync(accountPath, accountCallback);
   }
+  else {
+    stopSpinner();
+    updateStatus(pathArray[1] + ' not found on ' + platform, true)
+  }
 }
 
 var path = window.location.pathname;
@@ -196,5 +222,8 @@ var searchPath = '/Platform/Destiny/SearchDestinyPlayer/' + pathArray[0] + '/' +
 if (pathArray[0] == 2) {
   document.getElementById('platformSwitch').checked = true;
 }
-  
+var platform;
+pathArray[0] == 2 ? platform = 'PlayStation' : platform = 'Xbox';
+
+startSpinner();
 httpGetAsync(searchPath, searchCallback);

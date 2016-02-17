@@ -17,6 +17,10 @@ html
       div(class='columns small-12 medium-10 medium-offset-1 large-8 large-offset-2')
         include ./partials/search.jade
       div(class='columns small-12 calendar')
+        div(id='spinner' class='uil-ring-css')
+          div
+        div(id='statusText')
+      div(class='columns small-12 calendar')
       div(class='cross-promotion columns small-12 medium-10 medium-offset-1 large-8 large-offset-2') Play Destiny on Xbox? Record GameDVR clips? Check out the other cool Destiny thing I made: #[a(href='http://guardian.theater' target='_blank') guardian.theater]
     script(src="//d3js.org/d3.v3.min.js")
     script(src="/public/js/time-counter.js")
