@@ -31,6 +31,7 @@ var dayMax = 0;
 var activitiesLoaded = 0;
 
 var daysPlayedCallback = function(days, max) {
+  if (max > 86400) max = 86400;
   var width = 960,
       height = 136,
       cellSize = 17; // cell size
