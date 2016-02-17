@@ -28,6 +28,7 @@ var updateStatus = function (status, fail) {
 var daysPlayed = new Array();
 var charactersChecked = new Array();
 var dayMax = 0;
+var activitiesLoaded = 0;
 
 var daysPlayedCallback = function(days, max) {
   var width = 960,
@@ -116,15 +117,18 @@ var daysPlayedCallback = function(days, max) {
 
 var characterCallback = function(results, variables) {
   console.log('character callback started')
-  updateStatus('Fetching character data for ' + username + ' on ' + platform + '. This could take awhile...');
   var json;
   try {
     json = JSON.parse(results);
   } catch(e) {
     console.log(e);
+    stopSpinner();
+    updateStatus('Error parsing character results for ' + username + ' on ' + platform, true);
   }
   if (json && json.Response && json.Response.data && json.Response.data.activities && json.Response.data.activities.length) {
+    activitiesLoaded += json.Response.data.activities.length;
     console.log('json exists')
+    updateStatus('Compiling activity data for ' + username + ' on ' + platform + '. This could take awhile...');
     json.Response.data.activities.forEach(function(activity) {
       console.log('activity loop')
       if (activity && activity.period && activity.values.activityDurationSeconds && activity.values.activityDurationSeconds.basic && activity.values.activityDurationSeconds.basic.value) {
@@ -147,6 +151,7 @@ var characterCallback = function(results, variables) {
     });
     variables.page++;
     var path = variables.basePath + '&page=' + variables.page;
+    updateStatus('Fetching activity data for ' + username + ' on ' + platform + '. This could take awhile... Activities loaded: ' + activitiesLoaded);
     httpGetAsync(path, characterCallback, variables);
   }
   else {
@@ -167,12 +172,13 @@ var characterCallback = function(results, variables) {
 
 var accountCallback = function(results) {
   console.log('account callback started')
-  updateStatus('Fetching account data for ' + username + ' on ' + platform + '...');
   var json;
   try {
     json = JSON.parse(results);
   } catch(e) {
     console.log(e);
+    stopSpinner();
+    updateStatus('Error parsing account results for ' + username + ' on ' + platform, true);
   }
   if (json && json.Response && json.Response.data && json.Response.data.membershipType && json.Response.data.membershipId && json.Response.data.characters && json.Response.data.characters.length) {
     json.Response.data.characters.forEach(function(character) {
@@ -186,6 +192,7 @@ var accountCallback = function(results) {
           'page': 0,
           'characterId': character.characterBase.characterId
         };
+        updateStatus('Fetching activity data for ' + username + ' on ' + platform + '. This could take awhile...');
         httpGetAsync(characterPath, characterCallback, variables);
       }
     });
@@ -198,12 +205,13 @@ var accountCallback = function(results) {
 
 var searchCallback = function(results) {
   console.log('search callback started')
-  updateStatus('Searching for ' + username + ' on ' + platform + '...');
   var json;
   try {
     json = JSON.parse(results);
   } catch(e) {
     console.log(e);
+    stopSpinner();
+    updateStatus('Error parsing search results for ' + username + ' on ' + platform, true);
   }
   if (json && json.Response && json.Response[0] && json.Response[0].displayName) {
   //  document.getElementById('guardian-name').innerHTML = json.Response[0].displayName;
@@ -211,6 +219,7 @@ var searchCallback = function(results) {
   if (json && json.Response && json.Response[0] && json.Response[0].membershipId) {
     var membershipId = json.Response[0].membershipId;
     var accountPath = '/Platform/Destiny/' + pathArray[0] + '/Account/' + membershipId + '/Summary/';
+    updateStatus('Fetching account data for ' + username + ' on ' + platform + '...');
     httpGetAsync(accountPath, accountCallback);
   }
   else {
@@ -231,4 +240,5 @@ var platform;
 pathArray[0] == 2 ? platform = 'PlayStation' : platform = 'Xbox';
 
 startSpinner();
+updateStatus('Searching for ' + username + ' on ' + platform + '...');
 httpGetAsync(searchPath, searchCallback);
