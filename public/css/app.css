@@ -262,3 +262,17 @@ body {
 #statusText {
   text-align: center;
 }
+
+.scale {
+  text-align: center;
+  display: none;
+}
+.scale-graphic {
+  width: 50px;
+}
+
+.fixed-link {
+  text-align: center;
+  display: none;
+  margin-top: 2em;
+}

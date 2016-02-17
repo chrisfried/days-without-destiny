@@ -243,6 +243,13 @@ var searchPath = '/Platform/Destiny/SearchDestinyPlayer/' + pathArray[0] + '/' +
 if (pathArray[0] == 2) {
   document.getElementById('platformSwitch').checked = true;
 }
+if (!pathArray[2]) {
+  document.getElementById('fixed-link-link').href = '/' + pathArray[0] + '/' + pathArray[1] + '/fixed';
+  document.getElementById('fixed-link').style.display = 'block';
+}
+else {
+  document.getElementById('scale').style.display = 'block';
+}
 var platform;
 pathArray[0] == 2 ? platform = 'PlayStation' : platform = 'Xbox';
 
