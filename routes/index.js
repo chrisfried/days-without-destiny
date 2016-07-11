@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var httpProxy = require('http-proxy');
+var request = require('request');
 var fs = require('fs');
 
 router.get('/', function (req, res) {
@@ -10,27 +10,22 @@ router.get('/:membershipType/:guardian', function (req, res) {
   res.render('guardian');
 });
 
-var bungieProxy = httpProxy.createProxyServer({
-  target: 'http://www.bungie.net',
-  autoRewrite: true
+// Courtesy of https://github.com/DestinyTrialsReport/DestinyTrialsReport/blob/05c113f8d39dee2a02461902f0c9e1c287cad3aa/server.js#L37
+router.get('/Platform/*?', function (req, res) {
+  res.setTimeout(25000);
+  var options = {
+    url: 'https://www.bungie.net/' + req.originalUrl,
+    headers: {'X-API-Key': process.env.BUNGIE_KEY}
+  };
+  try {
+    request(options, function (error, response, body) {
+      if (!error) {
+        res.send(body);
+      } else {
+        res.send(error);
+      }
+    });
+  } catch (e) {}
 });
-
-bungieProxy.on('proxyReq', function(proxyReq, req, res) {
-  proxyReq.setHeader('host', 'www.bungie.net');
-  proxyReq.setHeader('x-api-key', process.env.BUNGIE_KEY);
-});
-
-bungieProxy.on('error', function(err, req, res) {
-  console.log(err);
-  res.writeHead(500, {
-    'Content-Type': 'text/plain'
-  });
-
-  res.end('Something went wrong contacting Bungie.');
-});
-
-router.get('/Platform*', function (req, res) {
-  bungieProxy.web(req, res);
-})
 
 module.exports = router;

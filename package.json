@@ -11,9 +11,9 @@
   "dependencies": {
     "express": "^4.13.4",
     "foundation-sites": "^6.1.2",
-    "http-proxy": "^1.13.0",
     "jade": "^1.11.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "request": "^2.73.0"
   },
   "repository" : {
     "type" : "git",
