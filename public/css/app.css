@@ -45,3 +45,7 @@
     font-size: 2em;
   }
 }
+
+.input-group, input, .input-group-button {
+  z-index: 20;
+}
